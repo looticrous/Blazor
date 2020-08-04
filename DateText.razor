@@ -1,0 +1,46 @@
+﻿<Fields>
+    <Field ColumnSize="ColumnSize.Is3.OnDesktop">
+        <FieldLabel>Month</FieldLabel>
+        <TextEdit @bind-Text="MonthValue" Placeholder="Month" KeyDown="Validate" KeyPress="Validate" InputMode="TextInputMode.Numeric" @onblur="Validate"></TextEdit>
+    </Field>
+    <Field ColumnSize="ColumnSize.Is2.OnDesktop">
+        <FieldLabel>Day</FieldLabel>
+        <TextEdit @bind-Text="DayValue" Placeholder="Day" KeyDown="Validate" KeyPress="Validate" InputMode="TextInputMode.Numeric" @onblur="Validate"></TextEdit>
+    </Field>
+    <Field ColumnSize="ColumnSize.Is4.OnDesktop">
+        <FieldLabel>Year</FieldLabel>
+        <TextEdit @bind-Text="YearValue" Placeholder="Year" KeyDown="Validate" KeyPress="Validate" InputMode="TextInputMode.Numeric" @onblur="Validate"></TextEdit>
+    </Field>
+    <Field>
+        <FieldLabel>@ValMessage</FieldLabel>
+        @if (Date.HasValue)
+        {
+            if (Date.Value == DateTime.MinValue)
+            {
+                <img src="./img/redx.png" height="15"/>
+            }
+            else
+            {
+                <img src="./img/check.png" height="15"/>
+            }
+        }
+    </Field>
+</Fields>
+
+
+@code {
+    [Parameter] public DateTime? Date { get; set; }
+    string MonthValue;
+    string DayValue;
+    string YearValue;
+    string ValMessage;
+    DateTime ParseResult;
+
+    void Validate()
+    {
+        string attempt = $"{MonthValue}/{DayValue}/{YearValue}";
+        Date = DateTime.TryParse(attempt, out ParseResult) == true ? DateTime.Parse(attempt) : DateTime.MinValue;
+        ValMessage = Date.Value.Date.ToShortDateString(); 
+    }
+
+}
